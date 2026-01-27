@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import os
 DATA_URL = 'https://raw.githubusercontent.com/plotly/datasets/master/2014_apple_stock.csv'
@@ -28,7 +29,6 @@ def read_and_visualize():
     #plt.show()
     plt.savefig('C:/Users/aysha/OneDrive/Desktop/apple_stock.png')
     
-    
     return DATA_CSV # or whatever variable you use to store the dataframe
 
 var = read_and_visualize()
@@ -52,10 +52,21 @@ def calculate_moving_average(values, w_size):
     #call the function and then show the plt.show() to have it display both of the plot components
     read_and_visualize() #this is printing in the correct place 
     plt.plot(values, roll)
-    plt.show()
+    #plt.show()
     
     return roll
 
+
 rollAvg = calculate_moving_average(values, w_size)
 print(rollAvg)
+    
+def calculate_bollinger_bands(rollAvg, window_size = 30):
+    upper = rollAvg + np.std(rollAvg)
+    lower = rollAvg - np.std(rollAvg)
+    plt.plot(values, upper)
+    plt.plot(values, lower)
+    plt.show()
+    
+bbands = calculate_bollinger_bands(rollAvg, window_size = 30)
+print(bbands)
     
