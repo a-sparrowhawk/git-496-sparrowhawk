@@ -40,6 +40,9 @@ print(var)
 
 #moving/rolling average 
 values = var.iloc[:, 1]
+time = var.iloc[:, 0]
+
+print(values)
 
 w_size = input("\nPlease enter the size of the rolling average you would like to compute: ")
 w_size = int(w_size)
@@ -49,36 +52,33 @@ def calculate_moving_average(values, w_size):
     if(w_size > len(values)):
         print("You entered a length that is bigger than the number of rows in the dataframe. I am going to assume you meant to enter the length of the dataframe. \n")
         w_size = len(values)
-        roll = values.rolling(w_size).sum()
-        roll = roll / w_size
+        roll = values.rolling(window = w_size).mean()
     else:    
-        roll = values.rolling(w_size).sum() #referenced: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html
-        roll = roll / w_size
+        roll = values.rolling(window = w_size).mean() #referenced: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html
         
     #call the function and then show the plt.show() to have it display both of the plot components
     #read_and_visualize() #this is printing in the correct place 
-    plt.plot(values, roll, color = "red")
+    plt.plot(time, roll, color = "red") #changed from values to time
     
     return roll
 
 rollAvg = calculate_moving_average(values, w_size)
 rollAvg
     
-    
+
 #bollinger bands 
 def calculate_bollinger_bands(rollAvg, window_size = 30):
     upper = rollAvg + np.std(rollAvg)
     lower = rollAvg - np.std(rollAvg)
-    plt.plot(values, upper, color = "blueviolet")
-    plt.plot(values, lower, color = "fuchsia")
-    #plt.show()
+    plt.plot(time, upper, color = "blueviolet")
+    plt.plot(time, lower, color = "fuchsia")
     
 bbands = calculate_bollinger_bands(rollAvg, window_size = 30)
 bbands
     
-    
+
 #maximum drawdown and daily drawdown 
-def max_and_daily_drawdown(values, window):
+def max_and_daily_drawdown(values):
     #print the maximum drawdown over the entire series 
     P = find_peaks(values)[0] #referenced stack overflow
     L = find_peaks(-values)[0] #referenced stack overflow
@@ -87,18 +87,75 @@ def max_and_daily_drawdown(values, window):
     print("The maximum drawdown over the entire series is:", MDD)
     
     #plot the daily drawdown over the entire series 
-    #reference: https://medium.com/cloudcraftz/measuring-maximum-drawdown-and-its-python-implementation-99a3963e158f
 
-    roll_max = values.rolling(window, min_periods =1).max()
-    daily_drawdown = values/roll_max - 1
-    max_daily = daily_drawdown.rolling(window, min_periods = 1).min()
+    #referenced: https://stackoverflow.com/questions/22607324/start-end-and-duration-of-maximum-drawdown-in-python
+    max_daily = [0]
+    for i in range(1, len(values)):
+        if values[i-1] > values[i]:
+            max_daily.append(values[i-1])
+        else:
+            max_daily.append(0) #changing from 0 to values[i]    
     #end of reference 
-    
-    plt.plot(values, max_daily, color = "green")
-    plt.show()
+        
+    plt.plot(time, max_daily, color = "green")
+    #plt.show()
     
     return max_daily  
 
-madd = max_and_daily_drawdown(values, window = len(values))
+madd = max_and_daily_drawdown(values)
 madd
 print("\n")
+
+#working up until here
+
+#relative strength index 
+def relative_strength_index(values):
+    #calculate the day to day price differences and store in variable called diff
+    values = np.array(values)
+    
+    diff = np.zeros(len(values))
+    for i in range(1, len(values)):
+        diff[i] = values[i] - values[i-1]
+            
+    #separate the two series
+    #   one for positive differences (Gains)        
+    #   one for negative differences (Losses)
+
+    Gains = []
+    Losses = []
+    for i in range(0, len(diff)):
+        if diff[i] < 0:
+            Losses.append(diff[i])
+            Gains.append(0)
+        elif diff[i] >= 0:
+            Gains.append(diff[i])
+            Losses.append(0)
+            
+    Gains = pd.DataFrame(Gains)
+    Losses = pd.DataFrame(Losses)
+    
+    Gains = Gains.loc[:, 0]
+    Losses = Losses.loc[:, 0]
+        
+    #take the rolling average of gains vs losses and derive the Relative strength.
+    #   take a three day rolling avg for this
+    rollAvg_gains = Gains.rolling(3).mean()
+    rollAvg_losses = Losses.rolling(3).mean()
+        
+    #compute RS doing rolling avg gains / rolling avg losses
+
+    RS = rollAvg_gains/rollAvg_losses
+    RS[0] = 0
+    RS[1] = 0
+    
+    #compute RSI as a time series using formula
+    RSI = 100 - (100 / (1 + RS))
+    
+    plt.plot(time, RSI, color = "gray")
+    plt.show()
+    
+    return RSI
+
+result = relative_strength_index(values)
+result
+
