@@ -42,8 +42,6 @@ print(var)
 values = var.iloc[:, 1]
 time = var.iloc[:, 0]
 
-print(values)
-
 w_size = input("\nPlease enter the size of the rolling average you would like to compute: ")
 w_size = int(w_size)
 print('\n')
@@ -57,7 +55,6 @@ def calculate_moving_average(values, w_size):
         roll = values.rolling(window = w_size).mean() #referenced: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html
         
     #call the function and then show the plt.show() to have it display both of the plot components
-    #read_and_visualize() #this is printing in the correct place 
     plt.plot(time, roll, color = "red") #changed from values to time
     
     return roll
@@ -68,8 +65,8 @@ rollAvg
 
 #bollinger bands 
 def calculate_bollinger_bands(rollAvg, window_size = 30):
-    upper = rollAvg + np.std(rollAvg)
-    lower = rollAvg - np.std(rollAvg)
+    upper = rollAvg + 2*np.std(rollAvg)
+    lower = rollAvg - 2*np.std(rollAvg)
     plt.plot(time, upper, color = "blueviolet")
     plt.plot(time, lower, color = "fuchsia")
     
@@ -98,7 +95,7 @@ def max_and_daily_drawdown(values):
     #end of reference 
         
     plt.plot(time, max_daily, color = "green")
-    #plt.show()
+    plt.show()
     
     return max_daily  
 
@@ -118,7 +115,7 @@ def relative_strength_index(values):
         diff[i] = values[i] - values[i-1]
             
     #separate the two series
-    #   one for positive differences (Gains)        
+    #   one for positive differences (Gains)         
     #   one for negative differences (Losses)
 
     Gains = []
@@ -143,15 +140,17 @@ def relative_strength_index(values):
     rollAvg_losses = Losses.rolling(3).mean()
         
     #compute RS doing rolling avg gains / rolling avg losses
-
     RS = rollAvg_gains/rollAvg_losses
     RS[0] = 0
     RS[1] = 0
-    
+
     #compute RSI as a time series using formula
     RSI = 100 - (100 / (1 + RS))
     
     plt.plot(time, RSI, color = "gray")
+    plt.title("RSI Over Time")
+    plt.ylabel("RSI")
+    plt.xlabel ("Time")
     plt.show()
     
     return RSI
