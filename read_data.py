@@ -84,16 +84,25 @@ def max_and_daily_drawdown(values):
     print("The maximum drawdown over the entire series is:", MDD)
     
     #plot the daily drawdown over the entire series 
-
+    
     #referenced: https://stackoverflow.com/questions/22607324/start-end-and-duration-of-maximum-drawdown-in-python
-    max_daily = [0]
+    max_daily = [values[0]]
     for i in range(1, len(values)):
         if values[i-1] > values[i]:
             max_daily.append(values[i-1])
         else:
-            max_daily.append(0) #changing from 0 to values[i]    
+            max_daily.append(values[i]) #changing from 0 to values[i]    
     #end of reference 
-        
+    
+    '''
+    #values = values.pct_change()
+    print(values)
+    #referenced: https://www.youtube.com/watch?v=TI9f9jIO41I
+    cumulative = (values + 1).cumsum()
+    running_max = np.maximum.accumulate(cumulative)
+    max_daily = (cumulative - running_max)/running_max
+    '''
+    
     plt.plot(time, max_daily, color = "green")
     plt.show()
     
@@ -117,6 +126,8 @@ def relative_strength_index(values):
     #separate the two series
     #   one for positive differences (Gains)         
     #   one for negative differences (Losses)
+    
+    print(diff)
 
     Gains = []
     Losses = []
@@ -150,7 +161,7 @@ def relative_strength_index(values):
     plt.plot(time, RSI, color = "gray")
     plt.title("RSI Over Time")
     plt.ylabel("RSI")
-    plt.xlabel ("Time")
+    plt.xlabel("Time")
     plt.show()
     
     return RSI
