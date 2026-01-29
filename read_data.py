@@ -104,7 +104,8 @@ def max_and_daily_drawdown(values):
     '''
     
     plt.plot(time, max_daily, color = "green")
-    plt.show()
+    plt.show() 
+    #displaying the plot now because the RSI in the next step is wrong and you cannot see these lines otherwise.
     
     return max_daily  
 
@@ -127,8 +128,6 @@ def relative_strength_index(values):
     #   one for positive differences (Gains)         
     #   one for negative differences (Losses)
     
-    print(diff)
-
     Gains = []
     Losses = []
     for i in range(0, len(diff)):
@@ -159,10 +158,11 @@ def relative_strength_index(values):
     RSI = 100 - (100 / (1 + RS))
     
     plt.plot(time, RSI, color = "gray")
-    plt.title("RSI Over Time")
+    plt.title("RSI Over Time") #this is very incorrect.
     plt.ylabel("RSI")
     plt.xlabel("Time")
-    plt.show()
+    plt.show() 
+    #I am displaying RSI separately because there is something wrong with the calculation and the values are too big. 
     
     return RSI
 
