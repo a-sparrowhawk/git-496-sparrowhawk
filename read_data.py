@@ -169,3 +169,6 @@ def relative_strength_index(values):
 result = relative_strength_index(values)
 result
 
+def fn_1():
+    pass
+
