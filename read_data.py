@@ -172,3 +172,5 @@ result
 def fn_1():
     pass
 
+def fn_2():
+    pass
