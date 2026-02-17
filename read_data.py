@@ -93,16 +93,16 @@ def max_and_daily_drawdown(values):
         else:
             max_daily.append(values[i]) #changing from 0 to values[i]    
     #end of reference 
+
     
-    '''
-    #values = values.pct_change()
+    values = values.pct_change()
     print(values)
     #referenced: https://www.youtube.com/watch?v=TI9f9jIO41I
     cumulative = (values + 1).cumsum()
     running_max = np.maximum.accumulate(cumulative)
     max_daily = (cumulative - running_max)/running_max
-    '''
     
+
     plt.plot(time, max_daily, color = "green")
     plt.show() 
     #displaying the plot now because the RSI in the next step is wrong and you cannot see these lines otherwise.
@@ -174,3 +174,14 @@ def fn_1():
 
 def fn_2():
     pass
+
+
+def calculate_mean(data):
+    if len(data) == 0:
+        raise ValueError("Input list cannot be empty")
+    if isinstance(data[0:len(data)], str):
+        raise ValueError("Input list cannot contain a string")
+    total = sum(data)
+    count = len(data)
+    mean = total / count
+    return mean
