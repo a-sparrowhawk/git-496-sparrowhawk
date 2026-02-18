@@ -1,5 +1,6 @@
 import pytest 
 from read_data import calculate_mean #import function that we want to test 
+from read_data import fibonacci_sequence
 
 #this is for the standard case when we have a list of numbers 
 def test_mean_standard():
@@ -19,3 +20,11 @@ def test_mean_empty():
 def test_mean_string():
     with pytest.raises(TypeError):
         calculate_mean(str)
+        
+def test_fib_sequence():
+    num = [0, 1]
+    assert len(fibonacci_sequence(num)) >= 2
+    with pytest.raises(TypeError):
+        fibonacci_sequence(str)
+    with pytest.raises(TypeError):
+        fibonacci_sequence(float)
