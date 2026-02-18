@@ -7,7 +7,7 @@ from scipy.signal import find_peaks #reference: https://plotly.com/python/peak-f
 DATA_URL = 'https://raw.githubusercontent.com/plotly/datasets/master/2014_apple_stock.csv'
 
 print("\n") #formatting 
-
+'''
 
 #plotting the data  
 def read_and_visualize():
@@ -174,7 +174,7 @@ def fn_1():
 
 def fn_2():
     pass
-
+'''
 
 def calculate_mean(data):
     if len(data) == 0:
@@ -185,3 +185,24 @@ def calculate_mean(data):
     count = len(data)
     mean = total / count
     return mean
+
+def fibonacci_sequence(nth):
+    if nth <= 0:
+        raise ValueError("Input must be positive.")
+    if isinstance(nth, str):
+        raise TypeError("Input cannot be a string.")
+    if isinstance(nth, float):
+        raise TypeError("Input cannot be a decimal.")
+    
+    f = [0, 1]
+    for i in range (2, nth-1):
+        val = f[i-1] + f[i-2]
+        f.append(val)
+    return f
+
+fib_val = input("Please enter a value for the fibonacci sequence you want.")
+fib_val = int(fib_val)
+print(fib_val)
+res = fibonacci_sequence(fib_val)
+
+print(res)
