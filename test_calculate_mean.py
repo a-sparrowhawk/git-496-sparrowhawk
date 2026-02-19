@@ -1,6 +1,7 @@
 import pytest 
 from read_data import calculate_mean #import function that we want to test 
 from read_data import fibonacci_sequence
+from read_data import properly_balanced
 
 #this is for the standard case when we have a list of numbers 
 def test_mean_standard():
@@ -28,3 +29,12 @@ def test_fib_sequence():
         fibonacci_sequence(str)
     with pytest.raises(TypeError):
         fibonacci_sequence(float)
+
+def test_properly_balance():
+    sentence = "{}"
+    with pytest.raises(TypeError):
+        properly_balanced(int)
+    with pytest.raises(TypeError):
+        properly_balanced(float)
+    assert len(properly_balanced(sentence)) % 2 == 0 #to ensure we enter an even number of characters. 
+    #cannot be properly balanced if we have an uneven amount of characters
