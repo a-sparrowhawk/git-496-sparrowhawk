@@ -175,6 +175,7 @@ def fn_1():
 def fn_2():
     pass
 '''
+print('\n \n')
 
 def calculate_mean(data):
     if len(data) == 0:
@@ -195,14 +196,55 @@ def fibonacci_sequence(nth):
         raise TypeError("Input cannot be a decimal.")
     
     f = [0, 1]
-    for i in range (2, nth-1):
+    for i in range (2, nth):
         val = f[i-1] + f[i-2]
         f.append(val)
     return f
 
-fib_val = input("Please enter a value for the fibonacci sequence you want.")
+fib_val = input("Please enter a value for the fibonacci sequence you want: ")
 fib_val = int(fib_val)
 print(fib_val)
 res = fibonacci_sequence(fib_val)
 
 print(res)
+print('\n \n')
+
+
+def properly_balanced(phrase):
+    #referenced geeksforgeeks for logic
+    #checking if the first char in the string is "matches" the closing char in the string
+    checker = False #boolean variable 
+    opens = []
+    closes = []
+    if(len(phrase) % 2 != 0):
+        raise ValueError("Length of input must be even.")
+    elif(isinstance(phrase, int)):
+        raise ValueError("Cannot contain integers.")
+    elif(isinstance(phrase, float)):
+        raise ValueError("Cannot contain floats or decimals.")
+    else:
+        for i in range (0, len(phrase)):
+            if(phrase[i] == "(" or phrase[i] == "[" or phrase[i] == "{"):
+                opens.append(phrase[i])    
+            elif(phrase[i] == ")" or phrase[i] == "]" or phrase[i] == "}"):
+                closes.append(phrase[i])
+        closes.reverse()
+        for i in range(0, len(opens)-1):
+        #while i != -i:
+            if(opens[i] == '(' and closes[i] == ')'):
+                checker = True
+            elif(opens[i] == '{' and closes[i] == '}'):
+                checker = True
+            elif(opens[i] == '[' and closes[i] == ']'):
+                checker = True
+
+    if(checker == True):
+        print("This is a balanced string. \n\n")
+    else:
+        print("This string is not balanced.\n\n")
+    return checker
+        
+    #pass
+
+bal_val = input("This function tells us if a string containing (, ), {, }, [, ] is properly balanced. Enter a string: ")
+properly_balanced(bal_val)
