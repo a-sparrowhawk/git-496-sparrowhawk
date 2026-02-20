@@ -7,7 +7,7 @@ from scipy.signal import find_peaks #reference: https://plotly.com/python/peak-f
 DATA_URL = 'https://raw.githubusercontent.com/plotly/datasets/master/2014_apple_stock.csv'
 
 print("\n") #formatting 
-'''
+
 
 #plotting the data  
 def read_and_visualize():
@@ -174,7 +174,8 @@ def fn_1():
 
 def fn_2():
     pass
-'''
+
+
 print('\n \n')
 
 def calculate_mean(data):
@@ -211,7 +212,6 @@ print('\n \n')
 
 
 def properly_balanced(phrase):
-    #referenced geeksforgeeks for logic
     #checking if the first char in the string is "matches" the closing char in the string
     checker = False #boolean variable 
     opens = []
@@ -223,14 +223,14 @@ def properly_balanced(phrase):
     elif(isinstance(phrase, float)):
         raise ValueError("Cannot contain floats or decimals.")
     else:
+        #referenced geeksforgeeks for logic
         for i in range (0, len(phrase)):
             if(phrase[i] == "(" or phrase[i] == "[" or phrase[i] == "{"):
                 opens.append(phrase[i])    
             elif(phrase[i] == ")" or phrase[i] == "]" or phrase[i] == "}"):
                 closes.append(phrase[i])
         closes.reverse()
-        for i in range(0, len(opens)-1):
-        #while i != -i:
+        for i in range(0, len(opens)):
             if(opens[i] == '(' and closes[i] == ')'):
                 checker = True
             elif(opens[i] == '{' and closes[i] == '}'):
@@ -244,7 +244,47 @@ def properly_balanced(phrase):
         print("This string is not balanced.\n\n")
     return checker
         
-    #pass
 
 bal_val = input("This function tells us if a string containing (, ), {, }, [, ] is properly balanced. Enter a string: ")
 properly_balanced(bal_val)
+print('\n')
+
+def merge_intervals(listOfLists):
+    newInts = []
+    if(isinstance(listOfLists, str)):
+        raise ValueError("Intervals cannot contain strings")
+    for i in range(0, len(listOfLists)):
+        #code obtained from: https://www.geeksforgeeks.org/dsa/merging-intervals/ on Feb 19th, 2026
+
+        listOfLists.sort() #sorting list based on first value in each of the sublists
+        
+        #identifies start and end of the sublists in the bigger list
+        start = listOfLists[i][0]
+        end = listOfLists[i][1]
+        
+        #end of code obtained from: https://www.geeksforgeeks.org/dsa/merging-intervals/ on Feb 19th, 2026
+
+        if end < start: #makes sure the left endpoint of interval is smaller than right endpoint of interval
+            raise ValueError("Left endpoint must be smaller than right endpoint.")
+            #this avoids intervals like [3, 2]
+        
+        #code obtained from: https://www.geeksforgeeks.org/dsa/merging-intervals/ on Feb 19th, 2026
+        if newInts and newInts[-1][1] >= end:
+            continue #skips intervals that are already merged since they are already larger than left endpoint at that iteration, and there is no overlap.
+        
+        #now we check all of the other intervals in the list against each interval one at a time 
+        for j in range(i+1, len(listOfLists)):
+            if listOfLists[j][0] <= end: #compare next lists left interval, with the end value we assigned at the beginning of loop
+                end = max(end, listOfLists[j][1]) #update the right endpoint (since the interval got bigger, this means there is overlap)
+        newInts.append([start, end]) #add the new interval with the original left endpoint and the newly updated right endpoint
+        #end of code obtained from: https://www.geeksforgeeks.org/dsa/merging-intervals/ on Feb 19th, 2026
+    return newInts
+        
+
+test = [[0, 1], [5, 10], [2, 6], [3, 4], [8, 10], [15, 18]]
+#seq_val = input("Please enter the intervals that you wish to merge in the form of a list of lists: ")
+#seq_val = list(seq_val)
+res = merge_intervals(test)
+print("Your old intervals are:", test, '\n')
+print("Your new intervals are:", res, '\n')
+
