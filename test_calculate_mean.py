@@ -2,6 +2,7 @@ import pytest
 from read_data import calculate_mean #import function that we want to test 
 from read_data import fibonacci_sequence
 from read_data import properly_balanced
+from read_data import merge_intervals 
 
 #this is for the standard case when we have a list of numbers 
 def test_mean_standard():
@@ -38,3 +39,14 @@ def test_properly_balance():
         properly_balanced(float)
     assert len(properly_balanced(sentence)) % 2 == 0 #to ensure we enter an even number of characters. 
     #cannot be properly balanced if we have an uneven amount of characters
+
+def test_merge_intervals():
+    ints = [[1, 2], [3, 4]]
+    for i in range(0, len(ints)):
+        left = ints[i][0]
+        right = ints[i][1]
+    with pytest.raises(TypeError):
+        merge_intervals(str)
+    assert len(merge_intervals(ints[0])) %2 == 0 #ensures we have a left and right endpoint in each of the intervals
+    assert left <= right #need to make sure left endpoint of interval is smaller than right endpoint of interval
+    
