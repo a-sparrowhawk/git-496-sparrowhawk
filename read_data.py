@@ -8,7 +8,7 @@ DATA_URL = 'https://raw.githubusercontent.com/plotly/datasets/master/2014_apple_
 
 print("\n") #formatting 
 
-
+'''
 #plotting the data  
 def read_and_visualize():
     # You'll use pandas to read the CSV data from the URL.
@@ -174,7 +174,7 @@ def fn_1():
 
 def fn_2():
     pass
-
+'''
 
 print('\n \n')
 
@@ -188,6 +188,10 @@ def calculate_mean(data):
     mean = total / count
     return mean
 
+data = [1, 2, 3, 4, 4, 5, 5, 6, 6, 7]
+mean_val = calculate_mean(data)
+print("The mean of your data is:", mean_val, '\n', '\n')
+
 def fibonacci_sequence(nth):
     if nth <= 0:
         raise ValueError("Input must be positive.")
@@ -197,6 +201,10 @@ def fibonacci_sequence(nth):
         raise TypeError("Input cannot be a decimal.")
     
     f = [0, 1]
+    if (nth == 1):
+        f = [0]
+    elif (nth == 2):
+        f = [0, 1]
     for i in range (2, nth):
         val = f[i-1] + f[i-2]
         f.append(val)
@@ -204,11 +212,9 @@ def fibonacci_sequence(nth):
 
 fib_val = input("Please enter a value for the fibonacci sequence you want: ")
 fib_val = int(fib_val)
-print(fib_val)
 res = fibonacci_sequence(fib_val)
-
 print(res)
-print('\n \n')
+print('\n')
 
 
 def properly_balanced(phrase):
@@ -217,7 +223,7 @@ def properly_balanced(phrase):
     opens = []
     closes = []
     if(len(phrase) % 2 != 0):
-        raise ValueError("Length of input must be even.")
+        raise TypeError("Length of input must be even.")
     elif(isinstance(phrase, int)):
         raise ValueError("Cannot contain integers.")
     elif(isinstance(phrase, float)):
@@ -247,15 +253,18 @@ def properly_balanced(phrase):
 
 bal_val = input("This function tells us if a string containing (, ), {, }, [, ] is properly balanced. Enter a string: ")
 properly_balanced(bal_val)
-print('\n')
+
 
 def merge_intervals(listOfLists):
     newInts = []
     if(isinstance(listOfLists, str)):
         raise ValueError("Intervals cannot contain strings")
+    elif(len(listOfLists) == 0):
+        raise ValueError("Input List cannot be empty.")
     for i in range(0, len(listOfLists)):
+        if(len(listOfLists[i]) != 2):
+            raise TypeError("Each interval must contain exactly two endpoints.")
         #code obtained from: https://www.geeksforgeeks.org/dsa/merging-intervals/ on Feb 19th, 2026
-
         listOfLists.sort() #sorting list based on first value in each of the sublists
         
         #identifies start and end of the sublists in the bigger list
@@ -281,10 +290,10 @@ def merge_intervals(listOfLists):
     return newInts
         
 
-test = [[0, 1], [5, 10], [2, 6], [3, 4], [8, 10], [15, 18]]
+test = [[0,1], [5, 10], [2, 6], [3, 4], [8, 10], [15, 18]]
 #seq_val = input("Please enter the intervals that you wish to merge in the form of a list of lists: ")
 #seq_val = list(seq_val)
 res = merge_intervals(test)
-print("Your old intervals are:", test, '\n')
+print("Your old intervals are:", test, '.')
 print("Your new intervals are:", res, '\n')
 
